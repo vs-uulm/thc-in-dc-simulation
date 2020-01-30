@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+    }
+}
+
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+apply plugin: 'application'
+apply plugin: 'eclipse'
+mainClassName = 'de.uulm.vs.dcn.benchmarking.Benchmarking'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.codahale:shamir:0.7.0'
+    compile 'commons-cli:commons-cli:1.3.1'
+    testCompile 'junit:junit:4.12'
+}
+
+// so that we can see stdout and stderr during tests
+test {
+    dependsOn cleanTest
+    testLogging.showStandardStreams = true
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'de.uulm.vs.dcn.benchmarking.Benchmarking'
+    }
+}
+    
+shadowJar {
+    // Remove license files from dependencies and maven configurations
+    excludes += ["META-INF/LICENSE*", "LICENSE*", "META-INF/NOTICE*", "NOTICE*", "META-INF/DEPENDENCIES", "META-INF/maven/**"]
+    
+    doLast {
+        ant.jar(update: "true", destfile: archivePath) {
+            zipfileset(dir: rootDir, prefix: "META-INF") {
+                include(name: "NOTICE-3RD-PARTY.txt")
+                include(name: "LICENSE-3RD-PARTY.txt")
+                include(name: "LICENSE.txt")
+            }
+        }
+    }
+}
+
+
+
+

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+docker run --name dcntest \
+           --rm \
+           -d \
+           -v "$(pwd)":/app/out \
+           dcntest -o out
