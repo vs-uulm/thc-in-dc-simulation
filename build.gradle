@@ -48,7 +48,7 @@ shadowJar {
             zipfileset(dir: rootDir, prefix: "META-INF") {
                 include(name: "NOTICE-3RD-PARTY.txt")
                 include(name: "LICENSE-3RD-PARTY.txt")
-                include(name: "LICENSE.txt")
+                include(name: "LICENSE")
             }
         }
     }
